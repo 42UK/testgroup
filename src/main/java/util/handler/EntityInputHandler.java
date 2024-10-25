@@ -3,7 +3,6 @@ package util.handler;
 import entity.Bus;
 import entity.Student;
 import entity.User;
-import util.RandomEntityGenerator;
 
 import java.util.*;
 
