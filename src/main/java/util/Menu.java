@@ -4,7 +4,6 @@ package util;
 import entity.Bus;
 import entity.Student;
 import entity.User;
-import sorting.BinarySearch;
 import sorting.Strategy;
 import util.handler.EntityHandler;
 import util.handler.EntityInputHandler;

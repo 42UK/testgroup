@@ -40,7 +40,7 @@ public class EntityHandler {
 
             buses.add(new Bus.Builder().setNumber(busNumber).setModel(busModel).setMileage(busMileage).build());
         }
-    //todo Вы добавили автобус тако1-то такой-то
+    //todo Вы добавили автобус такой-то такой-то вывод только добавленной сущности
 
         public static void addUser(Scanner scanner, List<User> users) {
             System.out.print("Введите имя: ");
