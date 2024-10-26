@@ -1,4 +1,0 @@
-Bus{number='Bus886', model='Model B', mileage=33301}
-Bus{number='Bus682', model='Model B', mileage=94865}
-Bus{number='Bus792', model='Model B', mileage=75823}
-Bus{number='wd', model='lad', mileage=3231}

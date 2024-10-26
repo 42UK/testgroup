@@ -12,29 +12,34 @@ public class QuickSort<T> implements Strategy<T> {
     }
 
     @Override
-    public void sort(List<T> list) {
-        quickSort(list, 0, list.size() - 1);
+    public void sort(T[] array) {
+        quickSort(array, 0, array.length - 1);
     }
 
-    private void quickSort(List<T> list, int low, int high) {
+    private void quickSort(T[] array, int low, int high) {
         if (low < high) {
-            int pi = partition(list, low, high);
-            quickSort(list, low, pi - 1);
-            quickSort(list, pi + 1, high);
+            int pi = partition(array, low, high);
+            quickSort(array, low, pi - 1);
+            quickSort(array, pi + 1, high);
         }
     }
 
-    private int partition(List<T> list, int low, int high) {
-        T pivot = list.get(high);
+    private int partition(T[] array, int low, int high) {
+        T pivot = array[high];
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            if (comparator.compare(list.get(j), pivot) < 0) {
+            if (comparator.compare(array[j], pivot) < 0) {
                 i++;
-                Collections.swap(list, i, j);
+                swap(array, i, j);
             }
         }
-        Collections.swap(list, i + 1, high);
+        swap(array, i + 1, high);
         return i + 1;
+    }
+    private void swap(T[] array, int i, int j) {
+        T temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
