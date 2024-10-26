@@ -1,5 +1,0 @@
-Bus123,Model A,50000
-Bus456,Model B,75000
-Bus789,Model C,25000
-Bus321,Model A,90000
-Bus654,Model B,40000

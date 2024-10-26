@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class FileHandler {
 
     // Метод для записи списка объектов в файл
-    public static <T> void writeToFile(List<T> list, String fileName) {
+    public static <T> void writeToFile(T[] list, String fileName) {
         try (FileWriter writer = new FileWriter("data/write/"+fileName , true)) { // true для добавления данных
             for (T item : list) {
                 writer.write(item.toString() + "\n"); // Используем toString для вывода информации об объекте
@@ -31,31 +31,29 @@ public class FileHandler {
     }
 
     // Метод для чтения с файла используется в моменте рандомного создания сущностей
-    public static <T> List<T> readFromFile(String fileName, Function<String, T> fromString) {
+    public static <T> List<T> readFromFile(String fileName, Function<String, T> fromString, int size) {
         List<T> list = new ArrayList<>();
         boolean validFile = false;
+        Scanner scanner = new Scanner(System.in);
         while (!validFile) {
-            try (BufferedReader reader = new BufferedReader(new FileReader("data/read"+fileName))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader("data/read/"+fileName))) {
                 String line;
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null && list.size() < size) {
                     list.add(fromString.apply(line));
                 }
                 validFile = true; // Файл успешно прочитан
             } catch (FileNotFoundException e) {
-                System.out.println("Файл не найден: " + fileName + "\n" +"Введите путь к файлу заново: ");
-                Scanner scanner = new Scanner(System.in);
+                System.out.println("Файл не найден: " + fileName + "\n" +"Введите название файла заново: ");
                 fileName = scanner.nextLine(); // Запрос нового пути к файлу
             } catch (IOException e) {
                 System.out.println("Ошибка при чтении файла: " + e.getMessage());
                 validFile = true; // Выход из цикла при других ошибках
             }
         }
-
-
+//        scanner.close();
         return list;
     }
-    //todo Переделать чтение с файла, он почему-то не находит
-    //todo переместить data в папку в ресурсы
-    //todo можно исправить короче сделать когда спрашивает чтение из файла
+    //todo Переделать чтение с файла, он почему-то не находит  и ещё возможность выхода и меню ввода пути
+    //todo исправить когда спрашивает чтение из файла можно выйти
 
 }
