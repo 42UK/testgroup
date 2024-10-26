@@ -5,189 +5,153 @@ import entity.Student;
 import entity.User;
 import util.EntityContainer;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class EntityInputHandler {
-    public static void addEntityManually(Scanner scanner, Bus[] buses, User[] users, Student[] students) {
+    public static void addEntityManually(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
             System.out.println("""
-                    Выберите тип сущности для добавления вручную:
-                    1. Автобус
-                    2. Пользователь
-                    3. Студент
-                    4. Назад
-                    """);
+                Выберите тип сущности для добавления вручную:
+                1. Автобус
+                2. Пользователь
+                3. Студент
+                4. Назад
+                """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
             switch (choice) {
                 case 1 -> {
-                    if (buses == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        buses = new Bus[scanner.nextInt() + 1];
-                        scanner.nextLine();
-                        EntityHandler.addBus(scanner, buses);
-                    } else {
-                        EntityHandler.addBus(scanner, buses);
-                    }
+                    entityContainer.buses = initializeArrayIfNull(scanner, entityContainer.buses, Bus.class);
+                    EntityHandler.addBus(scanner, entityContainer.buses);
                 }
                 case 2 -> {
-                    if (users == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        users = new User[scanner.nextInt()];
-                        scanner.nextLine();
-                        EntityHandler.addUser(scanner, users);
-                    } else {
-                        EntityHandler.addUser(scanner, users);
-                    }
+                    entityContainer.users = initializeArrayIfNull(scanner, entityContainer.users, User.class);
+                    EntityHandler.addUser(scanner, entityContainer.users);
                 }
                 case 3 -> {
-                    if (students == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        students = new Student[scanner.nextInt() + 1];
-                        scanner.nextLine();
-                        EntityHandler.addStudent(scanner, students);
-                    } else {
-                        EntityHandler.addStudent(scanner, students);
-                    }
+                    entityContainer.students = initializeArrayIfNull(scanner, entityContainer.students, Student.class);
+                    EntityHandler.addStudent(scanner, entityContainer.students);
                 }
-                case 4 -> running = false; /* Назад в подменю добавления */
+                case 4 -> running = false;
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
     }
 
-    public static void addEntityFromFile(Scanner scanner, Bus[] buses, User[] users, Student[] students) {
+    public static void addEntityFromFile(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
             System.out.println("""
-                    Выберите тип сущности для добавления из файла:
-                    1. Автобус
-                    2. Пользователь
-                    3. Студент
-                    4. Назад
-                    """);
-
+                Выберите тип сущности для добавления из файла:
+                1. Автобус
+                2. Пользователь
+                3. Студент
+                4. Назад
+                """);
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-
             String filePath;
-
             switch (choice) {
                 case 1 -> {
                     filePath = "buses.csv";
-                    if (buses == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        if (scanner.hasNextInt()) {
-                            int arraySize = scanner.nextInt() + 1;
-                            scanner.nextLine();
-                            buses = new Bus[arraySize];
-                            System.out.println("Массив автобусов инициализирован с размером: " + arraySize);
-                        } else {
-                            System.out.println("Ошибка: ожидалось целое число.");
-                            continue;
-                        }
-                        scanner.nextLine();
-                    }
+                    entityContainer.buses = initializeArrayIfNull(scanner, entityContainer.buses, Bus.class);
                     try {
-                        buses =  FileHandler.readFromFile(filePath, Bus::fromString, buses.length).toArray(new Bus[0]);
-                        System.out.println(Arrays.toString(buses));
+                        Bus[] buses = FileHandler.readFromFile(filePath, Bus::fromString, entityContainer.buses.length)
+                                .toArray(new Bus[0]);
+                        entityContainer.buses = buses;
                         System.out.println("Данные успешно считаны из файла: " + filePath);
                     } catch (Exception e) {
                         System.out.println("Ошибка при чтении файла: " + e.getMessage());
                     }
-                    return;
                 }
                 case 2 -> {
                     filePath = "users.csv";
-                    if (users == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        if (scanner.hasNextLine()) {
-                            int arraySize = scanner.nextInt() + 1;
-                            users = new User[arraySize];
-                            System.out.println("Массив пользователей инициализирован с размером: " + arraySize);
-                        } else {
-                            System.out.println("Ошибка: ожидалось целое число.");
-                            scanner.nextLine();
-                            return;
-                        }
-                        try {
-                            users = FileHandler.readFromFile(filePath, User::fromString, users.length).toArray(new User[0]);
-                            System.out.println("Данные успешно считаны из файла: " + filePath);
-                        } catch (Exception e) {
-                            System.out.println("Ошибка при чтении файла: " + e.getMessage());
-                        }
+                    entityContainer.users = initializeArrayIfNull(scanner, entityContainer.users, User.class);
+                    try {
+                        User[] users = FileHandler.readFromFile(filePath, User::fromString, entityContainer.users.length)
+                                .toArray(new User[0]);
+                        entityContainer.users = users;
+                        System.out.println("Данные успешно считаны из файла: " + filePath);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка при чтении файла: " + e.getMessage());
                     }
                 }
                 case 3 -> {
-//                    System.out.print("Введите путь к файлу студентов: ");
                     filePath = "students.csv";
-                    if (students == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        students = new Student[scanner.nextInt() + 1];
-                        students = FileHandler.readFromFile(filePath, Student::fromString, students.length).toArray(new Student[0]);
+                    entityContainer.students = initializeArrayIfNull(scanner, entityContainer.students, Student.class);
+                    try {
+                        Student[] students = FileHandler.readFromFile(filePath, Student::fromString, entityContainer.students.length)
+                                .toArray(new Student[0]);
+                        entityContainer.students = students;
+                        System.out.println("Данные успешно считаны из файла: " + filePath);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка при чтении файла: " + e.getMessage());
                     }
                 }
-                case 4 ->  running = false;/* Назад в подменю добавления */
+                case 4 -> running = false;
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
     }
 
-    public static void addEntityRandomly(Scanner scanner, Bus[] buses, User[] users, Student[] students) {
+    public static void addEntityRandomly(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
             System.out.println("""
-                    Выберите тип сущности для случайного добавления:
-                    1. Автобус
-                    2. Пользователь
-                    3. Студент
-                    4. Назад
-                    """);
+                Выберите тип сущности для случайного добавления:
+                1. Автобус
+                2. Пользователь
+                3. Студент
+                4. Назад
+                """);
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> {
-                    if (buses == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        buses = new Bus[scanner.nextInt() + 1];
-                        scanner.nextLine();
-                        for (int i = 0; i < buses.length; i++) {
-                            buses[i] = RandomEntityGenerator.createRandomBus();
-                        }
-                    } else {
-                        for (int i = 0; i < buses.length; i++) {
-                            buses[i] = RandomEntityGenerator.createRandomBus();
-                        }
+                    entityContainer.buses = initializeArrayIfNull(scanner, entityContainer.buses, Bus.class);
+                    for (int i = 0; i < entityContainer.buses.length; i++) {
+                        entityContainer.buses[i] = RandomEntityGenerator.createRandomBus();
                     }
                 }
                 case 2 -> {
-                    if (users == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        users = new User[scanner.nextInt() + 1];
-                        scanner.nextLine();
-                    }
-                    for (int i = 0; i < users.length; i++) {
-                        users[i] = RandomEntityGenerator.createRandomUser();
+                    entityContainer.users = initializeArrayIfNull(scanner, entityContainer.users, User.class);
+                    for (int i = 0; i < entityContainer.users.length; i++) {
+                        entityContainer.users[i] = RandomEntityGenerator.createRandomUser();
                     }
                 }
                 case 3 -> {
-                    if (students == null) {
-                        System.out.println("Введите необходимое количество элементов массива: ");
-                        students = new Student[scanner.nextInt() + 1];
-                        scanner.nextLine();
-                    }
-                    for (int i = 0; i < students.length; i++) {
-                        students[i] = RandomEntityGenerator.createRandomStudent();
+                    entityContainer.students = initializeArrayIfNull(scanner, entityContainer.students, Student.class);
+                    for (int i = 0; i < entityContainer.students.length; i++) {
+                        entityContainer.students[i] = RandomEntityGenerator.createRandomStudent();
                     }
                 }
-                case 4 -> running = true;/* Назад в подменю добавления */
+                case 4 -> running = false;
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
     }
+
+    // Метод для инициализации массива, если он не был ранее создан
+    private static <T> T[] initializeArrayIfNull(Scanner scanner, T[] array, Class<T> clazz) {
+        if (array == null) {
+            System.out.print("Введите необходимое количество элементов массива: ");
+            int size = scanner.nextInt();
+            scanner.nextLine(); // Очистка буфера
+            if (size > 0) {
+                T[] newArray = (T[]) Array.newInstance(clazz, size);
+                System.out.println("Массив инициализирован с размером: " + size);
+                return newArray;
+            } else {
+                System.out.println("Ошибка: размер массива должен быть положительным.");
+            }
+        }
+        return array;
+    }
+
 }
 

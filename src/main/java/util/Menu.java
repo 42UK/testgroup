@@ -15,11 +15,8 @@ import java.util.Scanner;
 
 public class Menu {
     private final Scanner scanner = new Scanner(System.in);
-    private Bus[] buses;
-    private User[] users;
-    private Student[] students;
-    private EntityContainer entityContainer = new EntityContainer();
-    private Strategy<String> strategy = new BinarySearch<>();
+    private final EntityContainer entityContainer = new EntityContainer();
+    private final Strategy<String> strategy = new BinarySearch<>();
 
     public void run() {
         while (true) {
@@ -32,16 +29,16 @@ public class Menu {
                 case 2 -> printSortOptions();
                 case 3 -> printWriteOptions();
                 case 4 -> printClearOptions();
-                case 5 -> printListOptions(); // Добавляем вывод списков
-                case 6 -> printSearchOptions(); // Добавляем поиск
+                case 5 -> printListOptions(); // Вывод списков
+                case 6 -> printSearchOptions(); // Поиск
                 case 7 -> System.exit(0); // Выход
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
-            //TODO: Провалидировать на ввод букв или цифр
         }
     }
-
-
+    /*todo - единственная TODO - которое я не доделал,
+       остальные информативные нужно добавить валидацию на неправильный ввод например
+       программа ожидает что пользователь ввёдет опцию 1 - для вывода функции добавления, а вместо цифры он вводит букву */
     private void printMainOptions() {
         System.out.println("""
                 Выберите категорию действий:
@@ -59,94 +56,86 @@ public class Menu {
         boolean running = true;
         while (running) {
             System.out.println("""
-                Выберите тип сущности для поиска:
-                1. Автобус
-                2. Пользователь
-                3. Студент
-                4. Назад
-                """);
+                    Выберите тип сущности для поиска:
+                    1. Автобус
+                    2. Пользователь
+                    3. Студент
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
+
             switch (choice) {
-                case 1 -> {
-                    if (buses == null || buses.length == 0) {
-                        System.out.println("Массив автобусов пуст! Сначала нужно добавить данные!");
-                        return;
-                    } else {
-                        searchBuses();
-                    }
-                }
-                case 2 -> {
-                    if (users == null || users.length == 0) {
-                        System.out.println("Массив пользователей пуст! Сначала нужно добавить данные!");
-                        return;
-                    } else {
-                        searchUsers();
-                    }
-                }
-                case 3 -> {
-                    if (students == null || students.length == 0) {
-                        System.out.println("Массив студентов пуст! Сначала нужно добавить данные!");
-                        return;
-                    } else {
-                        searchStudents();
-                    }
-                }
-                case 4 ->  running = false;/* Назад в главное меню */
+                case 1 -> searchBuses();
+                case 2 -> searchUsers();
+                case 3 -> searchStudents();
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
     }
 
     private void searchBuses() {
+        if (entityContainer.buses == null || entityContainer.buses.length == 0) {
+            System.out.println("Массив автобусов пуст! Сначала нужно добавить данные!");
+            return;
+        }
         System.out.print("Введите номер автобуса для поиска: ");
         String busNumber = scanner.nextLine().trim();
-        int index = strategy.search(Arrays.stream(buses).map(Bus::getNumber).toArray(String[]::new), busNumber); // Используем ваш класс BinarySearch
+        int index = strategy.search(
+                Arrays.stream(entityContainer.buses).map(Bus::getNumber).toArray(String[]::new), busNumber);
 
         if (index >= 0) {
-            Bus foundBus = buses[index]; // Получаем объект по индексу
-            System.out.println("Найден автобус: " + foundBus);
+            System.out.println("Найден автобус: " + entityContainer.buses[index]);
         } else {
             System.out.println("Автобус с номером " + busNumber + " не найден.");
         }
-    } //todo придумать как реализовать поиск по какому-то параметру он тут выдаёт ClassCastException
+    }
 
     private void searchUsers() {
+        if (entityContainer.users == null || entityContainer.users.length == 0) {
+            System.out.println("Массив пользователей пуст! Сначала нужно добавить данные!");
+            return;
+        }
         System.out.print("Введите email пользователя для поиска: ");
         String userEmail = scanner.nextLine().trim();
-        int index = strategy.search(Arrays.stream(users).map(User::getEmail).toArray(String[]::new), userEmail); // Используем ваш класс BinarySearch
+        int index = strategy.search(
+                Arrays.stream(entityContainer.users).map(User::getEmail).toArray(String[]::new), userEmail);
 
         if (index >= 0) {
-            User foundUser = users[index]; // Получаем объект по индексу
-            System.out.println("Найден пользователь: " + foundUser);
+            System.out.println("Найден пользователь: " + entityContainer.users[index]);
         } else {
             System.out.println("Пользователь с email " + userEmail + " не найден.");
         }
-    } //todo придумать как реализовать поиск по какому-то параметру он тут выдаёт ClassCastException
+    }
 
     private void searchStudents() {
+        if (entityContainer.students == null || entityContainer.students.length == 0) {
+            System.out.println("Массив студентов пуст! Сначала нужно добавить данные!");
+            return;
+        }
         System.out.print("Введите номер группы студента для поиска: ");
         String groupNumber = scanner.nextLine().trim();
-        int index = strategy.search(Arrays.stream(students).map(Student::getGroupNumber).toArray(String[]::new), groupNumber); // Используем ваш класс BinarySearch
+        int index = strategy.search(
+                Arrays.stream(entityContainer.students).map(Student::getGroupNumber).toArray(String[]::new), groupNumber);
 
         if (index >= 0) {
-            Student foundStudent = students[index]; // Получаем объект по индексу
-            System.out.println("Найден студент: " + foundStudent);
+            System.out.println("Найден студент: " + entityContainer.students[index]);
         } else {
-            System.out.println("Студент с номером группы " + groupNumber + " не существует.");
+            System.out.println("Студент с номером группы " + groupNumber + " не найден.");
         }
-    } //todo придумать как реализовать поиск по какому-то параметру он тут выдаёт ClassCastException
+    }
 
     private void printListOptions() {
         boolean running = true;
         while (running) {
             System.out.println("""
-                Выберите список для вывода:
-                1. Автобусы
-                2. Пользователи
-                3. Студенты
-                4. Назад
-                """);
+                    Выберите список для вывода:
+                    1. Автобусы
+                    2. Пользователи
+                    3. Студенты
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
@@ -154,7 +143,7 @@ public class Menu {
                 case 1 -> printBuses();
                 case 2 -> printUsers();
                 case 3 -> printStudents();
-                case 4 -> running = false;/* Назад в главное меню */
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -166,51 +155,51 @@ public class Menu {
         } else {
             System.out.println("Список автобусов:");
             for (Bus bus : entityContainer.buses) {
-                System.out.println(bus); // Предполагается, что метод toString() переопределен в классе Bus
+                System.out.println(bus);
             }
         }
     }
 
     private void printUsers() {
-        if (users == null || users.length == 0) {
+        if (entityContainer.users == null || entityContainer.users.length == 0) {
             System.out.println("Список пользователей пуст.");
         } else {
             System.out.println("Список пользователей:");
-            for (User user : users) {
-                System.out.println(user); // Предполагается, что метод toString() переопределен в классе User
+            for (User user : entityContainer.users) {
+                System.out.println(user);
             }
         }
     }
 
     private void printStudents() {
-        if (students == null || students.length == 0) {
+        if (entityContainer.students == null || entityContainer.students.length == 0) {
             System.out.println("Список студентов пуст.");
         } else {
             System.out.println("Список студентов:");
-            for (Student student : students) {
-                System.out.println(student); // Предполагается, что метод toString() переопределен в классе Student
+            for (Student student : entityContainer.students) {
+                System.out.println(student);
             }
         }
     }
 
     private void printAddOptions() {
         boolean running = true;
-        while (running){
+        while (running) {
             System.out.println("""
-                Выберите способ добавления:
-                1. Вручную
-                2. Из файла
-                3. Случайно
-                4. Назад
-                """);
+                    Выберите способ добавления:
+                    1. Вручную
+                    2. Из файла
+                    3. Случайно
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
             switch (choice) {
-                case 1 -> EntityInputHandler.addEntityManually(scanner, buses, users, students);
-                case 2 -> EntityInputHandler.addEntityFromFile(scanner, entityContainer.buses, users, students);
-                case 3 -> EntityInputHandler.addEntityRandomly(scanner, buses, users, students);
-                case 4 -> running = false;/* Назад в главное меню */
+                case 1 -> EntityInputHandler.addEntityManually(scanner, entityContainer);
+                case 2 -> EntityInputHandler.addEntityFromFile(scanner, entityContainer);
+                case 3 -> EntityInputHandler.addEntityRandomly(scanner, entityContainer);
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -220,38 +209,20 @@ public class Menu {
         boolean running = true;
         while (running) {
             System.out.println("""
-                Выберите действие:
-                1. Сортировать автобусы
-                2. Сортировать пользователей
-                3. Сортировать студентов
-                4. Назад
-                """);
+                    Выберите действие:
+                    1. Сортировать автобусы
+                    2. Сортировать пользователей
+                    3. Сортировать студентов
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
             switch (choice) {
-                case 1 -> {
-                    if (buses == null || buses.length <= 1) {
-                        System.out.println("Массив должен быть больше 1 элемента");
-                    } else {
-                        EntityHandler.sortAndPrint(buses, Bus.mileageComparator);
-                    }
-                }
-                case 2 -> {
-                    if (users == null || users.length <= 1) {
-                        System.out.println("Массив должен быть больше 1 элемента");
-                    } else {
-                        EntityHandler.sortAndPrint(users, User.emailComparator);
-                    }
-                }
-                case 3 -> {
-                    if (students == null || students.length <= 1) {
-                        System.out.println("Массив должен быть больше 1 элемента");
-                    } else {
-                        EntityHandler.sortAndPrint(students, Student.averageScoreComparator);
-                    }
-                }
-                case 4 -> running = false; /* Назад в главное меню */
+                case 1 -> EntityHandler.sortAndPrint(entityContainer.buses, Bus.mileageComparator);
+                case 2 -> EntityHandler.sortAndPrint(entityContainer.users, User.emailComparator);
+                case 3 -> EntityHandler.sortAndPrint(entityContainer.students, Student.averageScoreComparator);
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -261,56 +232,35 @@ public class Menu {
         boolean running = true;
         while (running) {
             System.out.println("""
-                Выберите действие:
-                1. Записать отсортированные автобусы в файл
-                2. Записать отсортированных пользователей в файл
-                3. Записать отсортированных студентов в файл
-                4. Назад
-                """);
+                    Выберите действие:
+                    1. Записать отсортированные автобусы в файл
+                    2. Записать отсортированных пользователей в файл
+                    3. Записать отсортированных студентов в файл
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
             switch (choice) {
-                case 1 -> {
-                    if (buses == null || buses.length == 0){
-                        System.out.println("Массив пуст, записывать нечего.");
-                        return;
-                    } else {
-                        FileHandler.writeToFile(buses, "sorted_buses.txt");
-                    }
-                }
-                case 2 -> {
-                    if (users == null || users.length == 0) {
-                        System.out.println("Массив пуст, записывать нечего.");
-                        return;
-                    } else {
-                        FileHandler.writeToFile(users, "sorted_users.txt");
-                    }
-                }
-                case 3 -> {
-                    if (students == null || students.length == 0) {
-                        System.out.println("Массив пуст, записывать нечего.");
-                        return;
-                    } else {
-                        FileHandler.writeToFile(students, "sorted_students.txt");
-                    }
-                }
-                case 4 -> running = false;/* Назад в главное меню */
+                case 1 -> FileHandler.writeToFile(entityContainer.buses, "sorted_buses.txt");
+                case 2 -> FileHandler.writeToFile(entityContainer.users, "sorted_users.txt");
+                case 3 -> FileHandler.writeToFile(entityContainer.students, "sorted_students.txt");
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
     }
 
     private void printClearOptions() {
-        boolean running  = true;
+        boolean running = true;
         while (running) {
             System.out.println("""
-                Выберите действие:
-                1. Очистить файл автобусов
-                2. Очистить файл пользователей
-                3. Очистить файл студентов
-                4. Назад
-                """);
+                    Выберите действие:
+                    1. Очистить файл автобусов
+                    2. Очистить файл пользователей
+                    3. Очистить файл студентов
+                    4. Назад
+                    """);
             int choice = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
 
@@ -318,7 +268,7 @@ public class Menu {
                 case 1 -> FileHandler.clearFile("sorted_buses.txt");
                 case 2 -> FileHandler.clearFile("sorted_users.txt");
                 case 3 -> FileHandler.clearFile("sorted_students.txt");
-                case 4 -> running = false;/* Назад в главное меню */
+                case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }

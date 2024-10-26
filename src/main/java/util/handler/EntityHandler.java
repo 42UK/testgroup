@@ -8,10 +8,14 @@ import sorting.Strategy;
 
 import java.util.*;
 
-public class EntityHandler {
+    public class EntityHandler {
         private static int busesCurrSize = 0;
-        private static int studentsIndex = 0;
-        private static int userCurrSize = 0;
+        private static int studentsCurrSize = 0;
+        private static int usersCurrSize = 0;
+
+        //TODO - Добавить вывод о том что массивы не полностью заполнены в случае неправильно
+        // ввода данных, а так всё работает, добавляет, просто немного не хватает информации
+        // - не знаю имеет ли смысл это реализовывать, просто когда будет введено не правильное, его выкидывает в меню обратно
         public static void addBus(Scanner scanner, Bus[] buses) {
             System.out.print("Введите номер: ");
             String busNumber = scanner.nextLine().trim();
@@ -39,9 +43,11 @@ public class EntityHandler {
                 System.out.println("Ошибка: пробег должен быть числом.");
                 return;
             }
+
             Bus bus = new Bus.Builder().setNumber(busNumber).setModel(busModel).setMileage(busMileage).build();
-            if (busesCurrSize < buses.length - 1) {
-                buses[++busesCurrSize] = bus;
+
+            if (busesCurrSize < buses.length) {
+                buses[busesCurrSize++] = bus;
                 System.out.println("Вы добавили: " + bus);
             } else {
                 System.out.println("Массив уже полон, вы не можете добавлять больше элементов");
@@ -69,10 +75,11 @@ public class EntityHandler {
                 System.out.println("Ошибка: введен некорректный адрес электронной почты.");
                 return;
             }
+
             User user = new User.Builder().setName(userName).setPassword(userPassword).setEmail(userEmail).build();
 
-            if (userCurrSize < users.length) {
-                users[++userCurrSize] = user;
+            if (usersCurrSize < users.length) {
+                users[usersCurrSize++] = user;
                 System.out.println("Вы добавили: " + user);
             } else {
                 System.out.println("Массив уже полон, вы не можете добавлять больше элементов");
@@ -91,7 +98,7 @@ public class EntityHandler {
             double averageScore;
             try {
                 averageScore = Double.parseDouble(scanner.nextLine().trim());
-                if (averageScore < 0 || averageScore > 5) { // Предположим, что средний балл от 0 до 5
+                if (averageScore < 0 || averageScore > 5) {
                     System.out.println("Ошибка: средний балл должен быть в диапазоне от 0 до 5.");
                     return;
                 }
@@ -99,9 +106,11 @@ public class EntityHandler {
                 System.out.println("Ошибка: средний балл должен быть числом.");
                 return;
             }
+
             Student student = new Student.Builder().setGroupNumber(groupNumber).setAverageScore(averageScore).build();
-            if (studentsIndex < students.length) {
-                students[++studentsIndex] = student;
+
+            if (studentsCurrSize < students.length) {
+                students[studentsCurrSize++] = student;
                 System.out.println("Вы добавили: " + student);
             } else {
                 System.out.println("Массив уже полон, вы не можете добавлять больше элементов");
@@ -109,9 +118,9 @@ public class EntityHandler {
         }
 
         private static boolean isValidEmail(String email) {
-            // Простая проверка на наличие '@' и '.'
             return email.contains("@") && email.contains(".");
         }
+
         public static <T> void sortAndPrint(T[] array, Comparator<T> comparator) {
             if (array.length <= 1) {
                 System.out.println("Массив должен быть больше одного элемента!");
