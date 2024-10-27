@@ -4,6 +4,7 @@ import entity.Bus;
 import entity.Student;
 import entity.User;
 import util.EntityContainer;
+import util.validate.InputValidator;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -12,15 +13,7 @@ public class EntityInputHandler {
     public static void addEntityManually(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            System.out.println("""
-                Выберите тип сущности для добавления вручную:
-                1. Автобус
-                2. Пользователь
-                3. Студент
-                4. Назад
-                """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
 
             switch (choice) {
                 case 1 -> {
@@ -44,15 +37,7 @@ public class EntityInputHandler {
     public static void addEntityFromFile(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            System.out.println("""
-                Выберите тип сущности для добавления из файла:
-                1. Автобус
-                2. Пользователь
-                3. Студент
-                4. Назад
-                """);
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
 
             String filePath;
             switch (choice) {
@@ -101,15 +86,7 @@ public class EntityInputHandler {
     public static void addEntityRandomly(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            System.out.println("""
-                Выберите тип сущности для случайного добавления:
-                1. Автобус
-                2. Пользователь
-                3. Студент
-                4. Назад
-                """);
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
 
             switch (choice) {
                 case 1 -> {
