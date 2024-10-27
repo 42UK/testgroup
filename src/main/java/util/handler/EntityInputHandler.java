@@ -45,9 +45,8 @@ public class EntityInputHandler {
                     filePath = "buses.csv";
                     entityContainer.buses = initializeArrayIfNull(scanner, entityContainer.buses, Bus.class);
                     try {
-                        Bus[] buses = FileHandler.readFromFile(filePath, Bus::fromString, entityContainer.buses.length)
+                        entityContainer.buses = FileHandler.readFromFile(filePath, Bus::fromString, entityContainer.buses.length)
                                 .toArray(new Bus[0]);
-                        entityContainer.buses = buses;
                         System.out.println("Данные успешно считаны из файла: " + filePath);
                     } catch (Exception e) {
                         System.out.println("Ошибка при чтении файла: " + e.getMessage());
@@ -57,9 +56,8 @@ public class EntityInputHandler {
                     filePath = "users.csv";
                     entityContainer.users = initializeArrayIfNull(scanner, entityContainer.users, User.class);
                     try {
-                        User[] users = FileHandler.readFromFile(filePath, User::fromString, entityContainer.users.length)
+                        entityContainer.users = FileHandler.readFromFile(filePath, User::fromString, entityContainer.users.length)
                                 .toArray(new User[0]);
-                        entityContainer.users = users;
                         System.out.println("Данные успешно считаны из файла: " + filePath);
                     } catch (Exception e) {
                         System.out.println("Ошибка при чтении файла: " + e.getMessage());
@@ -69,9 +67,8 @@ public class EntityInputHandler {
                     filePath = "students.csv";
                     entityContainer.students = initializeArrayIfNull(scanner, entityContainer.students, Student.class);
                     try {
-                        Student[] students = FileHandler.readFromFile(filePath, Student::fromString, entityContainer.students.length)
+                        entityContainer.students = FileHandler.readFromFile(filePath, Student::fromString, entityContainer.students.length)
                                 .toArray(new Student[0]);
-                        entityContainer.students = students;
                         System.out.println("Данные успешно считаны из файла: " + filePath);
                     } catch (Exception e) {
                         System.out.println("Ошибка при чтении файла: " + e.getMessage());
