@@ -9,6 +9,7 @@ import sorting.Strategy;
 import util.handler.EntityHandler;
 import util.handler.EntityInputHandler;
 import util.handler.FileHandler;
+import util.validate.InputValidator;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -20,10 +21,7 @@ public class Menu {
 
     public void run() {
         while (true) {
-            printMainOptions();
-            int mainChoice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
-
+            int mainChoice = InputValidator.validateNumber(scanner, returnMainOptions());
             switch (mainChoice) {
                 case 1 -> printAddOptions();
                 case 2 -> printSortOptions();
@@ -39,8 +37,8 @@ public class Menu {
     /*todo - единственная TODO - которое я не доделал,
        остальные информативные нужно добавить валидацию на неправильный ввод например
        программа ожидает что пользователь ввёдет опцию 1 - для вывода функции добавления, а вместо цифры он вводит букву */
-    private void printMainOptions() {
-        System.out.println("""
+    private String returnMainOptions() {
+        return """
                 Выберите категорию действий:
                 1. Добавление
                 2. Сортировка
@@ -49,21 +47,12 @@ public class Menu {
                 5. Вывод списков
                 6. Поиск
                 7. Выход
-                """);
+                """;
     }
-
     private void printSearchOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
-                    Выберите тип сущности для поиска:
-                    1. Автобус
-                    2. Пользователь
-                    3. Студент
-                    4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
 
             switch (choice) {
                 case 1 -> searchBuses();
@@ -88,7 +77,7 @@ public class Menu {
         if (index >= 0) {
             System.out.println("Найден автобус: " + entityContainer.buses[index]);
         } else {
-            System.out.println("Автобус с номером " + busNumber + " не найден.");
+            System.out.println("Автобус с номером " + busNumber + " не найден. Попробуйте отсортировать массив.");
         }
     }
 
@@ -105,7 +94,7 @@ public class Menu {
         if (index >= 0) {
             System.out.println("Найден пользователь: " + entityContainer.users[index]);
         } else {
-            System.out.println("Пользователь с email " + userEmail + " не найден.");
+            System.out.println("Пользователь с email " + userEmail + " не найден. Попробуйте отсортировать массив.");
         }
     }
 
@@ -129,15 +118,7 @@ public class Menu {
     private void printListOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
-                    Выберите список для вывода:
-                    1. Автобусы
-                    2. Пользователи
-                    3. Студенты
-                    4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
 
             switch (choice) {
                 case 1 -> printBuses();
@@ -185,15 +166,14 @@ public class Menu {
     private void printAddOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            String inputOption = """
                     Выберите способ добавления:
                     1. Вручную
                     2. Из файла
                     3. Случайно
                     4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+                    """;
+            int choice = InputValidator.validateNumber(scanner, inputOption);
 
             switch (choice) {
                 case 1 -> EntityInputHandler.addEntityManually(scanner, entityContainer);
@@ -208,18 +188,16 @@ public class Menu {
     private void printSortOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            String sortOption = """
                     Выберите действие:
                     1. Сортировать автобусы
                     2. Сортировать пользователей
                     3. Сортировать студентов
                     4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
-
+                    """;
+            int choice = InputValidator.validateNumber(scanner, sortOption);
             switch (choice) {
-                case 1 -> EntityHandler.sortAndPrint(entityContainer.buses, Bus.mileageComparator);
+                case 1 -> EntityHandler.sortAndPrint(entityContainer.buses, Bus.numberComparator);
                 case 2 -> EntityHandler.sortAndPrint(entityContainer.users, User.emailComparator);
                 case 3 -> EntityHandler.sortAndPrint(entityContainer.students, Student.averageScoreComparator);
                 case 4 -> running = false; // Назад в главное меню
@@ -231,20 +209,37 @@ public class Menu {
     private void printWriteOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            String writeOption = """
                     Выберите действие:
                     1. Записать отсортированные автобусы в файл
                     2. Записать отсортированных пользователей в файл
                     3. Записать отсортированных студентов в файл
                     4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+                    """;
+            int choice = InputValidator.validateNumber(scanner, writeOption);
 
             switch (choice) {
-                case 1 -> FileHandler.writeToFile(entityContainer.buses, "sorted_buses.txt");
-                case 2 -> FileHandler.writeToFile(entityContainer.users, "sorted_users.txt");
-                case 3 -> FileHandler.writeToFile(entityContainer.students, "sorted_students.txt");
+                case 1 -> {
+                    if (entityContainer.buses == null) {
+                        System.out.println("Массив пуст, записывать нечего!");
+                    } else {
+                        FileHandler.writeToFile(entityContainer.buses, "sorted_buses.txt");
+                    }
+                }
+                case 2 -> {
+                    if (entityContainer.users == null) {
+                        System.out.println("Массив пуст, записывать нечего!");
+                    } else {
+                        FileHandler.writeToFile(entityContainer.users, "sorted_users.txt");
+                    }
+                }
+                case 3 -> {
+                    if (entityContainer.students == null) {
+                        System.out.println("Массив пуст, записывать нечего!");
+                    } else {
+                        FileHandler.writeToFile(entityContainer.students, "sorted_students.txt");
+                    }
+                }
                 case 4 -> running = false; // Назад в главное меню
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
@@ -254,15 +249,14 @@ public class Menu {
     private void printClearOptions() {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            String clearOption = """
                     Выберите действие:
                     1. Очистить файл автобусов
                     2. Очистить файл пользователей
                     3. Очистить файл студентов
                     4. Назад
-                    """);
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка буфера
+                    """;
+            int choice = InputValidator.validateNumber(scanner, clearOption);
 
             switch (choice) {
                 case 1 -> FileHandler.clearFile("sorted_buses.txt");
