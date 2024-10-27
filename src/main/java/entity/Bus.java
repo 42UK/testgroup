@@ -3,9 +3,9 @@ package entity;
 import java.util.Comparator;
 
 public class Bus implements Comparable<Bus> {
-    private String number;
-    private String model;
-    private int mileage;
+    private final String number;
+    private final String model;
+    private final int mileage;
 
     private Bus(Builder builder) {
         this.number = builder.number;
@@ -48,25 +48,10 @@ public class Bus implements Comparable<Bus> {
     }
 
     // Компараторы для различных критериев сортировки
-    public static Comparator<Bus> mileageComparator = new Comparator<Bus>() {
-        @Override
-        public int compare(Bus b1, Bus b2) {
-            return Integer.compare(b1.mileage, b2.mileage);
-        }
-    };
+    public static Comparator<Bus> mileageComparator = Comparator.comparingInt(b -> b.mileage);
 
-    public static Comparator<Bus> modelComparator = new Comparator<Bus>() {
-        @Override
-        public int compare(Bus b1, Bus b2) {
-            return b1.model.compareTo(b2.model);
-        }
-    };
-    public static Comparator<Bus> numberComparator = new Comparator<Bus>() {
-        @Override
-        public int compare(Bus b1, Bus b2) {
-            return b1.number.compareTo(b2.number);
-        }
-    };
+    public static Comparator<Bus> modelComparator = Comparator.comparing(b -> b.model);
+    public static Comparator<Bus> numberComparator = Comparator.comparing(b -> b.number);
     public static Bus fromString(String line) {
         String[] parts = line.split(",");
         return new Bus.Builder()

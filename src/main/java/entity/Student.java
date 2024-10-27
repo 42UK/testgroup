@@ -3,9 +3,9 @@ package entity;
 import java.util.Comparator;
 
 public class Student implements Comparable<Student> {
-    private String groupNumber;
-    private double averageScore;
-    private String recordBookNumber;
+    private final String groupNumber;
+    private final double averageScore;
+    private final String recordBookNumber;
 
     private Student(Builder builder) {
         this.groupNumber = builder.groupNumber;
@@ -56,12 +56,7 @@ public class Student implements Comparable<Student> {
     }
 
     // Компаратор для сортировки по среднему баллу
-    public static Comparator<Student> averageScoreComparator = new Comparator<Student>() {
-        @Override
-        public int compare(Student s1, Student s2) {
-            return Double.compare(s1.averageScore, s2.averageScore);
-        }
-    };
+    public static Comparator<Student> averageScoreComparator = Comparator.comparingDouble(s -> s.averageScore);
     @Override
     public String toString() {
         return "Student{" +

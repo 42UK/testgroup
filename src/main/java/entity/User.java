@@ -3,9 +3,9 @@ package entity;
 import java.util.Comparator;
 
 public class User implements Comparable<User> {
-    private String name;
-    private String password;
-    private String email;
+    private final String name;
+    private final String password;
+    private final String email;
 
     private User(Builder builder) {
         this.name = builder.name;
