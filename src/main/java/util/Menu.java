@@ -34,9 +34,6 @@ public class Menu {
             }
         }
     }
-    /*todo - единственная TODO - которое я не доделал,
-       остальные информативные нужно добавить валидацию на неправильный ввод например
-       программа ожидает что пользователь ввёдет опцию 1 - для вывода функции добавления, а вместо цифры он вводит букву */
     private String returnMainOptions() {
         return """
                 Выберите категорию действий:
@@ -136,7 +133,9 @@ public class Menu {
         } else {
             System.out.println("Список автобусов:");
             for (Bus bus : entityContainer.buses) {
-                System.out.println(bus);
+                if (bus != null) {
+                    System.out.println(bus);
+                }
             }
         }
     }
@@ -147,7 +146,9 @@ public class Menu {
         } else {
             System.out.println("Список пользователей:");
             for (User user : entityContainer.users) {
-                System.out.println(user);
+                if (user != null) {
+                    System.out.println(user);
+                }
             }
         }
     }
@@ -158,7 +159,9 @@ public class Menu {
         } else {
             System.out.println("Список студентов:");
             for (Student student : entityContainer.students) {
-                System.out.println(student);
+                if (student != null) {
+                    System.out.println(student);
+                }
             }
         }
     }
