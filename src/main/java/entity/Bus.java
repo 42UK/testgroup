@@ -61,6 +61,12 @@ public class Bus implements Comparable<Bus> {
             return b1.model.compareTo(b2.model);
         }
     };
+    public static Comparator<Bus> numberComparator = new Comparator<Bus>() {
+        @Override
+        public int compare(Bus b1, Bus b2) {
+            return b1.number.compareTo(b2.number);
+        }
+    };
     public static Bus fromString(String line) {
         String[] parts = line.split(",");
         return new Bus.Builder()
