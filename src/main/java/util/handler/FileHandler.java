@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 public class FileHandler {
 
-    //todo - не было директории write - создал, теперь создаёт(файл) и записывает, так же очищает
 
     // Метод для записи списка объектов в файл
     public static <T> void writeToFile(T[] list, String fileName) {
@@ -75,8 +74,7 @@ public class FileHandler {
         }
 
         return list;
-    /* todo исправить когда спрашивает чтение из файла можно выйти
-      - 27.09.2024 Уже не актуально, так как он не спрашивает название файла для чтения */
+
 
 }
 }
