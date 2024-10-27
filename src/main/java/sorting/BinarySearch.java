@@ -8,11 +8,13 @@ public class BinarySearch<T extends Comparable<T>> implements Strategy<T> {
 
     @Override
     public void sort(T[] array) {
-        Arrays.sort(array); // Используем встроенный метод сортировки
+        Strategy<T> quickSort = new QuickSort<>();
+        quickSort.sort(array);
     }
 
 
     public int search(T[] array, T key) {
+        sort(array);
         int left = 0;
         int right = array.length - 1;
 

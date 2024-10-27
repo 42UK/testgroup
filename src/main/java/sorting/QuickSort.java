@@ -10,6 +10,8 @@ public class QuickSort<T> implements Strategy<T> {
     public QuickSort(Comparator<T> comparator) {
         this.comparator = comparator;
     }
+    public QuickSort() {
+    }
 
     @Override
     public void sort(T[] array) {
