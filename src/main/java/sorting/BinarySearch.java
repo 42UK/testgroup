@@ -1,8 +1,5 @@
 package sorting;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class BinarySearch<T extends Comparable<T>> implements Strategy<T> {
 

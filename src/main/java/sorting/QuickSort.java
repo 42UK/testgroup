@@ -1,8 +1,6 @@
 package sorting;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class QuickSort<T> implements Strategy<T> {
     private Comparator<T> comparator;
