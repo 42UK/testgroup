@@ -117,6 +117,7 @@ public class EntityInputHandler {
             int size = scanner.nextInt();
             scanner.nextLine(); // Очистка буфера
             if (size > 0) {
+                @SuppressWarnings("unchecked")
                 T[] newArray = (T[]) Array.newInstance(clazz, size);
                 System.out.println("Массив инициализирован с размером: " + size);
                 return newArray;
