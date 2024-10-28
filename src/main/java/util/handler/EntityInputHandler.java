@@ -15,7 +15,7 @@ public class EntityInputHandler {
     public static void addEntityManually(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
+            int choice = InputValidator.validateNumber(scanner, menu.entityOption());
 
             switch (choice) {
                 case 1 -> {
@@ -40,7 +40,7 @@ public class EntityInputHandler {
     public static void addEntityFromFile(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
+            int choice = InputValidator.validateNumber(scanner, menu.entityOption());
 
             String filePath;
             switch (choice) {
@@ -87,7 +87,7 @@ public class EntityInputHandler {
     public static void addEntityRandomly(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
-            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
+            int choice = InputValidator.validateNumber(scanner, menu.entityOption());
 
             switch (choice) {
                 case 1 -> {

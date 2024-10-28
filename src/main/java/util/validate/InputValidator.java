@@ -77,14 +77,4 @@ public class InputValidator {
     private static boolean isValidEmail(String email) {
         return EMAIL_PATTERN.matcher(email).matches();
     }
-    public static String entityOption() {
-        return """
-                    Выберите список для вывода:
-                    1. Автобусы
-                    2. Пользователи
-                    3. Студенты
-                    4. Назад
-                    5. Выход в главное меню
-                    """;
-    }
 }

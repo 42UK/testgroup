@@ -49,7 +49,7 @@ public class Menu {
     private void printSearchOptions() {
         boolean running = true;
         while (running) {
-            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
+            int choice = InputValidator.validateNumber(scanner, entityOption());
 
             switch (choice) {
                 case 1 -> searchBuses();
@@ -116,7 +116,7 @@ public class Menu {
     private void printListOptions() {
         boolean running = true;
         while (running) {
-            int choice = InputValidator.validateNumber(scanner, InputValidator.entityOption());
+            int choice = InputValidator.validateNumber(scanner, entityOption());
 
             switch (choice) {
                 case 1 -> printBuses();
@@ -297,5 +297,15 @@ public class Menu {
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
+    }
+    public String entityOption() {
+        return """
+                    Выберите список для вывода:
+                    1. Автобусы
+                    2. Пользователи
+                    3. Студенты
+                    4. Назад
+                    5. Выход в главное меню
+                    """;
     }
 }
