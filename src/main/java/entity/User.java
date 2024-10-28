@@ -57,12 +57,7 @@ public class User implements Comparable<User> {
     }
 
     // Компаратор для сортировки по почте
-    public static Comparator<User> emailComparator = new Comparator<User>() {
-        @Override
-        public int compare(User u1, User u2) {
-            return u1.email.compareTo(u2.email);
-        }
-    };
+    public static Comparator<User> emailComparator = Comparator.comparing(u -> u.email);
 
     @Override
     public String toString() {
