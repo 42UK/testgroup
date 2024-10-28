@@ -55,7 +55,8 @@ public class Menu {
                 case 1 -> searchBuses();
                 case 2 -> searchUsers();
                 case 3 -> searchStudents();
-                case 4 -> running = false; // Назад в главное меню
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -121,7 +122,8 @@ public class Menu {
                 case 1 -> printBuses();
                 case 2 -> printUsers();
                 case 3 -> printStudents();
-                case 4 -> running = false; // Назад в главное меню
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -175,6 +177,7 @@ public class Menu {
                     2. Из файла
                     3. Случайно
                     4. Назад
+                    5. Выход в главное меню
                     """;
             int choice = InputValidator.validateNumber(scanner, inputOption);
 
@@ -182,7 +185,8 @@ public class Menu {
                 case 1 -> EntityInputHandler.addEntityManually(scanner, entityContainer);
                 case 2 -> EntityInputHandler.addEntityFromFile(scanner, entityContainer);
                 case 3 -> EntityInputHandler.addEntityRandomly(scanner, entityContainer);
-                case 4 -> running = false; // Назад в главное меню
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -197,13 +201,33 @@ public class Menu {
                     2. Сортировать пользователей
                     3. Сортировать студентов
                     4. Назад
+                    5. Выход в главное меню
                     """;
             int choice = InputValidator.validateNumber(scanner, sortOption);
             switch (choice) {
-                case 1 -> EntityHandler.sortAndPrint(entityContainer.buses, Bus.numberComparator);
-                case 2 -> EntityHandler.sortAndPrint(entityContainer.users, User.emailComparator);
-                case 3 -> EntityHandler.sortAndPrint(entityContainer.students, Student.averageScoreComparator);
-                case 4 -> running = false; // Назад в главное меню
+                case 1 -> {
+                    if (entityContainer.buses == null) {
+                        System.out.println("Массив пуст, сначала заполните массив.");
+                    } else {
+                        EntityHandler.sortAndPrint(entityContainer.buses, Bus.numberComparator);
+                    }
+                }
+                case 2 -> {
+                    if (entityContainer.users == null) {
+                        System.out.println("Массив пуст, сначала заполните массив.");
+                    } else {
+                        EntityHandler.sortAndPrint(entityContainer.users, User.emailComparator);
+                    }
+                }
+                case 3 -> {
+                    if (entityContainer.students == null) {
+                        System.out.println("Массив пуст, сначала заполните массив.");
+                    } else {
+                        EntityHandler.sortAndPrint(entityContainer.students, Student.averageScoreComparator);
+                    }
+                }
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -218,6 +242,7 @@ public class Menu {
                     2. Записать отсортированных пользователей в файл
                     3. Записать отсортированных студентов в файл
                     4. Назад
+                    5. Выход в главное меню
                     """;
             int choice = InputValidator.validateNumber(scanner, writeOption);
 
@@ -243,7 +268,8 @@ public class Menu {
                         FileHandler.writeToFile(entityContainer.students, "sorted_students.txt");
                     }
                 }
-                case 4 -> running = false; // Назад в главное меню
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -258,6 +284,7 @@ public class Menu {
                     2. Очистить файл пользователей
                     3. Очистить файл студентов
                     4. Назад
+                    5. Выход в главное меню
                     """;
             int choice = InputValidator.validateNumber(scanner, clearOption);
 
@@ -265,7 +292,8 @@ public class Menu {
                 case 1 -> FileHandler.clearFile("sorted_buses.txt");
                 case 2 -> FileHandler.clearFile("sorted_users.txt");
                 case 3 -> FileHandler.clearFile("sorted_students.txt");
-                case 4 -> running = false; // Назад в главное меню
+                case 4 -> running = false;
+                case 5 -> run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }

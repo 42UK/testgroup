@@ -4,12 +4,14 @@ import entity.Bus;
 import entity.Student;
 import entity.User;
 import util.EntityContainer;
+import util.Menu;
 import util.validate.InputValidator;
 
 import java.lang.reflect.Array;
 import java.util.*;
 
 public class EntityInputHandler {
+    private static final Menu menu = new Menu();
     public static void addEntityManually(Scanner scanner, EntityContainer entityContainer) {
         boolean running = true;
         while (running) {
@@ -29,6 +31,7 @@ public class EntityInputHandler {
                     EntityHandler.addStudent(scanner, entityContainer.students);
                 }
                 case 4 -> running = false;
+                case 5 -> menu.run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -75,6 +78,7 @@ public class EntityInputHandler {
                     }
                 }
                 case 4 -> running = false;
+                case 5 -> menu.run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
@@ -105,6 +109,7 @@ public class EntityInputHandler {
                     }
                 }
                 case 4 -> running = false;
+                case 5 -> menu.run();
                 default -> System.out.println("Неверный выбор. Попробуйте снова.");
             }
         }
